@@ -3,6 +3,10 @@ var cacheLink = {},
         key: 'id',
         index: ''
     },
+    JacksonParser = {
+        decode: decode,
+        config: config
+    },
     toString = Object.prototype.toString;
 
 function normalizeJackson (obj, config) {
@@ -41,11 +45,4 @@ function decode (data) {
     }
 }
 
-var JacksonParser = {
-    decode: decode,
-    config: config
-}
-
-module.exports = {
-    JacksonParser: JacksonParser
-}
+module.exports = JacksonParser;
