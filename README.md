@@ -13,3 +13,12 @@ Jackson parser is a parser o// for Jackson object to normalized json.
 
   JacksonParser.decode(<Jackson Object>);// return a normalized json.
 ```
+
+##Config
+```
+  var JacksonParser = require('jackson-parser');
+
+  JacksonParser.config.key = "@id";
+
+  JacksonParser.decode(<Jackson Object>);// return a normalized json.
+```

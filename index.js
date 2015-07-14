@@ -15,11 +15,12 @@ function normalizeJackson (obj, config) {
     keys.forEach(function (key) {
         var val = obj[key],
             _key = config.index + key + ':';
-        
+
         if ( cacheLink[_key + val] ) {
             obj[key] = cacheLink[_key + val];
         } else if ( toString.apply(val) === '[object Object]' ) {
             cacheLink[_key + val[config.key]] = val;
+            normalizeJackson(val, config);
         } else if ( toString.apply(val) === '[object Array]' ) {
             val.forEach(function (item, index) {
                 normalizeJackson(item, {
