@@ -31,6 +31,8 @@ function normalizeJackson (obj, config) {
         }
     });
     
+    delete obj[config.key];
+    
     return obj;
 }
 
