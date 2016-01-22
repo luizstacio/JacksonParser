@@ -8,9 +8,11 @@ var lab = exports.lab = Lab.script();
 var expect = require('chai').expect;
 var assert = require('chai').assert
 
+
+
 lab.experiment('JacksonParser', function () {
   lab.test('JacksonParser.decode() with list', function (done) {
-    var objEncoded = [{
+    var objEncoded = { content: [{
                         id: 1,
                         prop: null,
                         professional: {
@@ -33,21 +35,21 @@ lab.experiment('JacksonParser', function () {
                         professional: 1,
                         professional2: 1,
                         filhos: [1, 2]
-                      }];
+                      }] };
 
     var dataEncoded = JacksonParser.decode(objEncoded);
-    var data0 = dataEncoded[0];
-    var data1 = dataEncoded[1];
+    var data0 = dataEncoded.content[0];
+    var data1 = dataEncoded.content[1];
 
     assert.equal(data0.professional.name, 'Pedro');
     assert.equal(data0.professional2.name, 'João');
     assert.equal(data1.professional.name, 'Pedro');
     assert.equal(data1.professional2.name, 'João');
 
-    assert.equal(data0.filhos[0].name, 'foo');
-    assert.equal(data0.filhos[1].name, 'bar');
-    assert.equal(data1.filhos[0].name, 'foo');
-    assert.equal(data1.filhos[1].name, 'bar');
+    assert.equal(data0.filhos[0].name, 'foo', 'data0.filhos0.name');
+    assert.equal(data0.filhos[1].name, 'bar', 'data0.filhos1.name');
+    assert.equal(data1.filhos[0].name, 'foo', 'data1.filhos0.name');
+    assert.equal(data1.filhos[1].name, 'bar', 'data1.filhos1.name');
 
     done();
   });
