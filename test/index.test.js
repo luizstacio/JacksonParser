@@ -1,6 +1,6 @@
 'use strict';
 
-var JacksonParser = require('../bin');
+var JacksonParser = require('../');
 
 var chai = require('chai');
 var Lab = require('lab');

@@ -1,8 +1,8 @@
 {
   "name": "jackson-parser",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Parser for Jackson object ",
-  "main": "index.js",
+  "main": "bin/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
