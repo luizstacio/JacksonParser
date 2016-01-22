@@ -13,6 +13,7 @@ function get (key) {
 }
 
 module.exports = {
+  _cache: cache,
   has: has,
   get: get,
   set: set

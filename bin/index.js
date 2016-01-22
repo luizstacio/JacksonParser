@@ -28,14 +28,25 @@ function cloneObject(obj) {
 
 function mountStorekey(key, item) {
   var index = config.uuid ? '' : key;
-
+  
+  if (item == null) return '';
   return (index + ((item[config.key] ? ':' + item[config.key] : '') || ':' + item)).replace(/^:/, '');
+}
+
+function storeList(list, key) {
+  return list.map(function (item) {
+    if ( typeof item == 'object' || Array.isArray(item) ) {
+      return storeItem(item, key);
+    } else {
+      return storeItem(item, key);
+    } 
+  });
 }
 
 function storeItem (item, key) {
   var index = mountStorekey(key, item);
 
-  if ( Array.isArray(item) ) return parseArray(item);
+  if ( Array.isArray(item) ) return storeList(item, key);
   if ( Cache.has(index) ) return Cache.get(index);
   if ( typeof item === 'object' ) Cache.set(index, item);
 

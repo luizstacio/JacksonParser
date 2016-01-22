@@ -9,20 +9,60 @@ var expect = require('chai').expect;
 var assert = require('chai').assert
 
 lab.experiment('JacksonParser', function () {
-  lab.test('JacksonParser.decode() uuid false', function (done) {
+  lab.test('JacksonParser.decode() with list', function (done) {
     var objEncoded = [{
                         id: 1,
+                        prop: null,
                         professional: {
                           id: 1,
                           name: 'Pedro'
                         },
                         professional2: {
                           id: 1,
-                          name: 'João',
-                          professional: {
-                            id: 1,
-                            name: 'Pedro'
-                          }
+                          name: 'João'
+                        },
+                        filhos: [{
+                          id: 1,
+                          name: 'foo'
+                        }, {
+                          id: 2,
+                          name: 'bar'
+                        }]
+                      }, {
+                        id: 2,
+                        professional: 1,
+                        professional2: 1,
+                        filhos: [1, 2]
+                      }];
+
+    var dataEncoded = JacksonParser.decode(objEncoded);
+    var data0 = dataEncoded[0];
+    var data1 = dataEncoded[1];
+
+    assert.equal(data0.professional.name, 'Pedro');
+    assert.equal(data0.professional2.name, 'João');
+    assert.equal(data1.professional.name, 'Pedro');
+    assert.equal(data1.professional2.name, 'João');
+
+    assert.equal(data0.filhos[0].name, 'foo');
+    assert.equal(data0.filhos[1].name, 'bar');
+    assert.equal(data1.filhos[0].name, 'foo');
+    assert.equal(data1.filhos[1].name, 'bar');
+
+    done();
+  });
+
+  lab.test('JacksonParser.decode() uuid false', function (done) {
+    var objEncoded = [{
+                        id: 1,
+                        prop: null,
+                        professional: {
+                          id: 1,
+                          name: 'Pedro'
+                        },
+                        professional2: {
+                          id: 1,
+                          name: 'João'
                         }
                       }, {
                         id: 2,
@@ -77,20 +117,20 @@ lab.experiment('JacksonParser', function () {
 
   lab.test('JacksonParser.decode() config.key "@id"', function (done) {
     var objEncoded = [{
-                              id: 1,
-                              professional: {
-                                '@id': 1,
-                                name: 'Pedro'
-                              },
-                              professional2: {
-                                '@id': 2,
-                                name: 'João'
-                              }
-                            }, {
-                              id: 2,
-                              professional: 1,
-                              professional2: 2
-                            }];
+                        id: 1,
+                        professional: {
+                          '@id': 1,
+                          name: 'Pedro'
+                        },
+                        professional2: {
+                          '@id': 2,
+                          name: 'João'
+                        }
+                      }, {
+                        id: 2,
+                        professional: 1,
+                        professional2: 2
+                      }];
 
     JacksonParser.config.key = "@id";
     
@@ -110,20 +150,20 @@ lab.experiment('JacksonParser', function () {
 
   lab.test('JacksonParser.decode() clone true', function (done) {
     var objEncoded = [{
-                              id: 1,
-                              professional: {
-                                '@id': 1,
-                                name: 'Pedro'
-                              },
-                              professional2: {
-                                '@id': 2,
-                                name: 'João'
-                              }
-                            }, {
-                              id: 2,
-                              professional: 1,
-                              professional2: 2
-                            }];
+                        id: 1,
+                        professional: {
+                          '@id': 1,
+                          name: 'Pedro'
+                        },
+                        professional2: {
+                          '@id': 2,
+                          name: 'João'
+                        }
+                      }, {
+                        id: 2,
+                        professional: 1,
+                        professional2: 2
+                      }];
 
     JacksonParser.config.clone = true;
     
