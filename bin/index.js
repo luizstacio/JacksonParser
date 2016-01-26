@@ -56,8 +56,8 @@ function storeItem (item, key) {
 
   index = mountStorekey(key, item);
 
-  if ( index === '' ) return item;
   if ( Array.isArray(item) ) return storeList(item, key);
+  if ( index === '' ) return item;
   if ( Cache.has(index) ) return Cache.get(index);
   if ( typeof item === 'object' ) Cache.set(index, item);
 
@@ -68,7 +68,7 @@ function parse (data) {
   var keys = Object.keys(data);
 
   keys.forEach(function (key) {
-    data[key] = storeItem(data[key], key);
+    if (key !== config.key) data[key] = storeItem(data[key], key);
   });
 
   return data;
