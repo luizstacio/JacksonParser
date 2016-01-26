@@ -28,9 +28,15 @@ function cloneObject(obj) {
 
 function mountStorekey(key, item) {
   var index = config.uuid ? '' : key;
+  var _key = index + '';
   
-  
-  return (index + ((item[config.key] ? ':' + item[config.key] : '') || ':' + item)).replace(/^:/, '');
+  if ( item[config.key] ) {
+    _key += ':' + item[config.key];
+  } else if (typeof item !== 'object') {
+    _key += ':' + item;
+  }
+
+  return _key.replace(/^:/, '');
 }
 
 function storeList(list, key) {
@@ -50,6 +56,7 @@ function storeItem (item, key) {
 
   index = mountStorekey(key, item);
 
+  if ( index === '' ) return item;
   if ( Array.isArray(item) ) return storeList(item, key);
   if ( Cache.has(index) ) return Cache.get(index);
   if ( typeof item === 'object' ) Cache.set(index, item);
@@ -77,7 +84,6 @@ function decode (data) {
   data = config.clone ? cloneObject(data) : data;
   return Array.isArray(data) ? parseArray(data) : parse(data);
 }
-
 
 module.exports = {
   decode: decode,
