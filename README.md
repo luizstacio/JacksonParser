@@ -1,5 +1,7 @@
 #Jackson Parser
 
+[![Build Status](https://travis-ci.org/luizstacio/JacksonParser.svg?branch=master)](https://travis-ci.org/luizstacio/JacksonParser)
+
 Jackson parser is a parser o// for Jackson object to normalized json.
 
 ###Install
