@@ -1,88 +1,78 @@
 var Cache = require('./cache');
-
+var Helpers = require('./helpers');
 var config = {
   key: 'id',
-  index: '',
-  clone: false,
   uuid: false
-};
-
-function cloneObject(obj) {
-    if (obj == null  || "object" != typeof obj) return obj;
-
-    var copy = obj.constructor();
-    
-    for (var attr in obj) {
-        if (obj.hasOwnProperty(attr)) {
-          if (Array.isArray(obj[attr])) {
-            copy[attr] = obj[attr].map(cloneObject);
-          } else if ("object" == typeof obj[attr]) {
-            copy[attr] = cloneObject(obj[attr]);
-          } else {
-            copy[attr] = obj[attr];
-          }
-        }
-    }
-    return copy;
 }
 
-function mountStorekey(key, item) {
-  var index = config.uuid ? '' : key;
-  var _key = index + '';
-  
-  if ( item[config.key] ) {
-    _key += ':' + item[config.key];
-  } else if (typeof item !== 'object') {
-    _key += ':' + item;
+function Parser (data) {}
+
+function currentkey(attr, value) {
+  var key = [attr, value].join(':').replace(/^:/, '');
+
+  return (config.uuid) ? value : key;
+}
+
+Parser.prototype.replaceObject = function (obj, attr) {
+  var $this = this;
+
+  attr = attr || '$$root';
+
+  if (obj[config.key] != null) {
+    $this.cache.set(currentkey(attr, obj[config.key]), obj);
   }
 
-  return _key.replace(/^:/, '');
-}
-
-function storeList(list, key) {
-  return list.map(function (item) {
-    if ( typeof item == 'object' || Array.isArray(item) ) {
-      return parse(storeItem(item, key));
-    } else {
-      return storeItem(item, key);
-    } 
-  });
-}
-
-function storeItem (item, key) {
-  var index;
-
-  if ( item == null ) return item;
-
-  index = mountStorekey(key, item);
-
-  if ( Array.isArray(item) ) return storeList(item, key);
-  if ( index === '' ) return item;
-  if ( Cache.has(index) ) return Cache.get(index);
-  if ( typeof item === 'object' ) Cache.set(index, item);
-
-  return item;
-}
-
-function parse (data) {
-  var keys = Object.keys(data);
-
-  keys.forEach(function (key) {
-    if (key !== config.key) data[key] = storeItem(data[key], key);
+  Helpers.each(obj, function (item, key) {
+    try {
+      obj[key] = $this.replace(item, key);
+      if (!Helpers.isObject(item)) JSON.stringify($this.$root);
+    } catch(e) {
+      obj[key] = item;
+    }
   });
 
-  return data;
+  return obj;
 }
 
-function parseArray(list) {
-  return list.map(function (item) {
-    return parse(item);
+Parser.prototype.replaceList = function (obj, attr) {
+  var $this = this;
+
+  attr = attr || '$$$root';
+
+  obj.forEach(function (item, key) {
+    obj[key] = $this.replace(item, attr);
   });
+
+  return obj;
 }
 
-function decode (data) {
-  data = config.clone ? cloneObject(data) : data;
-  return Array.isArray(data) ? parseArray(data) : parse(data);
+Parser.prototype.replace = function (obj, attr) {
+  var $this = this;
+
+  if ( obj == null ) return obj;
+  if (Array.isArray(obj)) return $this.replaceList(obj, attr);
+  if (Helpers.isObject(obj)) return $this.replaceObject(obj, attr);
+  if ($this.cache.has(currentkey(attr, obj)) && config.key !== attr) {
+    return $this.cache.get(currentkey(attr, obj));
+  }
+
+  return obj;
+}
+
+Parser.prototype.decode = function decode (data) {
+  var $this = this;
+
+  data = (config.clone) ? Helpers.clone(data) : data;
+
+  $this.cache = new Cache();
+  $this.$root = data;
+
+  return this.replace(data);
+}
+
+function decode(data) {
+  var parser = new Parser();
+  return parser.decode(data);
 }
 
 module.exports = {

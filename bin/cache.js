@@ -1,20 +1,18 @@
-var cache = {};
-
-function has (key) {
-  return !!cache[key];
+function Cache () {
+  this.cache = {};
+  return this;
 }
 
-function set (key, value) {
-  cache[key] = value;
+Cache.prototype.has = function has (key) {
+  return !!this.cache[key];
 }
 
-function get (key) {
-  return cache[key];
+Cache.prototype.set = function set (key, value) {
+  this.cache[key] = value;
 }
 
-module.exports = {
-  _cache: cache,
-  has: has,
-  get: get,
-  set: set
+Cache.prototype.get = function get (key) {
+  return this.cache[key];
 }
+
+module.exports = Cache;
