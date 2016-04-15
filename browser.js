@@ -1,0 +1,1 @@
+window.jacksonparser = require('./bin');
