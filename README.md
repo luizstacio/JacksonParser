@@ -15,12 +15,20 @@ Jackson parser is a parser o// for Jackson object to normalized json.
 
   JacksonParser.decode(<Jackson Object>);// return a normalized json.
 ```
+####On global
+```
+  <script src="./dist/jacksonparser.min.js"></script>
+  <script>
+    jacksonparser.decode(<Jackson Object>);
+  </script>
+```
 
-##Config
+##Configs
 ```
   var JacksonParser = require('jackson-parser');
 
   JacksonParser.config.key = "@id";
+  JacksonParser.config.clone = true;
 
-  JacksonParser.decode(<Jackson Object>);// return a normalized json.
+  JacksonParser.decode(<Jackson Object>);// return a new json normalized.
 ```
