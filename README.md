@@ -18,17 +18,21 @@ Jackson is a compressor json.
   JacksonParser.decode(<Jackson Object>);// return a normalized json.
   JacksonParser.encode(<JSON>);// return a jackson json.
 ```
+####On global
+```
+  <script src="./dist/jacksonparser.min.js"></script>
+  <script>
+    jacksonparser.decode(<Jackson Object>);
+  </script>
+```
 
-##Config
+##Configs
 ```
   var JacksonParser = require('jackson-parser');
 
-  JacksonParser.config.key = "@id";
-  JacksonParser.decode(<Jackson Object>);// return a normalized json.
-
-  //OR
-
   JacksonParser.decode(<Jackson Object>, {
-    key: "@id"
+    key: "@id", //default is id
+    clone: true, //default is false
+    uuid: true, //default is false
   });
 ```
