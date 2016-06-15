@@ -4,6 +4,8 @@
 
 Jackson parser is a parser o// for Jackson object to normalized json.
 
+Jackson is a compressor json.
+
 ###Install
 ```
   npm install jackson-parser
@@ -14,6 +16,7 @@ Jackson parser is a parser o// for Jackson object to normalized json.
   var JacksonParser = require('jackson-parser');
 
   JacksonParser.decode(<Jackson Object>);// return a normalized json.
+  JacksonParser.encode(<JSON>);// return a jackson json.
 ```
 
 ##Config
@@ -21,6 +24,11 @@ Jackson parser is a parser o// for Jackson object to normalized json.
   var JacksonParser = require('jackson-parser');
 
   JacksonParser.config.key = "@id";
-
   JacksonParser.decode(<Jackson Object>);// return a normalized json.
+
+  //OR
+
+  JacksonParser.decode(<Jackson Object>, {
+    key: "@id"
+  });
 ```

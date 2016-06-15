@@ -1,6 +1,5 @@
 function Cache () {
   this.cache = {};
-  return this;
 }
 
 Cache.prototype.has = function has (key) {

@@ -17,6 +17,14 @@ function clone(obj) {
     return copy;
 }
 
+function extend(objA, objB) {
+  Object.keys(objB).map(function (key) {
+    return objA[key] = objB[key];
+  });
+
+  return objA;
+}
+
 function each(data, fn) {
   var keys = Object.keys(data);
 
@@ -32,5 +40,6 @@ function isObject(obj) {
 module.exports = {
   each: each,
   clone: clone,
+  extend: extend,
   isObject: isObject
 }
